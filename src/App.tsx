@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav/Nav";
+import PageContent from "./components/PageContent/PageContent";
+import SideBar from "./components/SideBar/SideBar";
+import GlobalStyle from "./GlobalStyle";
+import Footer from "./components/Footer/Footer";
+import SideBarContext from "./context/SideBarContext";
+import { useState } from "react";
 
-function App() {
+const App: React.FC = () => {
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <GlobalStyle />
+      <BrowserRouter>
+        <SideBarContext.Provider value={{ isSideBarOpen, setIsSideBarOpen}}>
+          <Nav />
+          { isSideBarOpen && <SideBar />}
+        </SideBarContext.Provider>
+        <PageContent>
+          <Routes>
+            <Route path="/" element={<div>Home page</div>} />
+            <Route path="/cart" element={<div>shopping cart</div>} />
+            <Route path="/wishlist" element={<div>wishlist</div>} />
+            <Route path="/category" element={<div>category page</div>} />
+            <Route path="/product" element={<div>product</div>} />
+            <Route path="/*" element={<div>404 page</div>} />
+          </Routes>
+        </PageContent>
+        <Footer />
+      </BrowserRouter>
+    </>
+  )
 }
 
 export default App;
